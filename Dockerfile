@@ -1,4 +1,4 @@
-FROM golang:1.10-alpine
+FROM golang:1.10-alpine as build
 
 LABEL maintainer="Jerry Warren<jerry@forged-concepts.com>"
 
@@ -9,20 +9,19 @@ RUN apk update && \
         git \
         make \
         py2-pip=10.0.1-r0 \
-        zip
+        zip \
+    && rm /var/cache/apk/*
 
 # Install Packer
-RUN go get github.com/hashicorp/packer
-
-WORKDIR $GOPATH/src/github.com/hashicorp/packer
-RUN make dev && mv ./bin/packer /bin/packer
+RUN go get github.com/hashicorp/packer && \
+    cd $GOPATH/src/github.com/hashicorp/packer && \
+    make dev && \
+    mv ./bin/packer /bin/packer && \
+    rm -rf $GOPATH/* /root/.cache
 
 # Install awscli
 RUN pip install awscli
 
-# Clean up time
-RUN apk --purge -v del py-pip make
-RUN rm -rf /var/cache/apk/* $GOPATH/src/github.com/*
-
 WORKDIR /
-ENTRYPOINT [ "/bin/sh" ]
+ENTRYPOINT [ "/bin/packer" ]
+CMD ["--help"]
