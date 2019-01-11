@@ -7,6 +7,7 @@ RUN apk update && \
     apk add --no-cache \
         curl \
         git \
+        jq \
         make \
         py2-pip=10.0.1-r0 \
         zip \

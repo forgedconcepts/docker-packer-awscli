@@ -1,14 +1,15 @@
 # docker-packer-awscli
 Docker container with packer and aws-cli
 
-This image is built for use with pipelines where package and aws-cli are needed.
+This image is built for use with pipelines where packer and aws-cli are needed.
 
 # Details
 Installs the following packages:
-- aws-cli/1.16.85
+- aws-cli
 - curl
+- jq
 - git
-- packer/1.3.4-dev
+- packer
 - py2-pip=10.0.1-r0
 - zip
 
